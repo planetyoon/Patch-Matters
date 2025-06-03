@@ -134,3 +134,6 @@ data/lvis_v1
 model/
 work_dirs/
 checkpoints/
+
+#Ignore large dataset files
+divide/ovdet/data/coco/wusize/
