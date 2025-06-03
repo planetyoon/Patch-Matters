@@ -36,10 +36,10 @@ if __name__ == '__main__':
     args = arg.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-    inference = DetInferencer(model=args.model_config_file, weights=args.checkpoint_file, device='cuda:1')
+    inference = DetInferencer(model=args.model_config_file, weights=args.checkpoint_file, device='cpu')
 
 
-    image_files = [os.path.join(arg.image_folder, f) for f in os.listdir(arg.image_folder) if f.lower().endswith(('.png', '.jpg'))]
+    image_files = [os.path.join(args.image_folder, f) for f in os.listdir(args.image_folder) if f.lower().endswith(('.png', '.jpg'))]
 
     base_final_scores = 0.3
     i = 0
@@ -68,10 +68,10 @@ if __name__ == '__main__':
         final_result.append(data_result)
         obj_result.append(obj)
 
-    with open(arg.four_box_save_path, 'w', encoding='utf-8') as file:
+    with open(args.four_box_save_path, 'w', encoding='utf-8') as file:
         json.dump(final_result, file, ensure_ascii=False, indent=4)
 
     # if arg.object_box_save_path is not None:
     obj_result = {item['image']: item for item in obj_result}
-    with open(arg.object_box_save_path, 'w', encoding='utf-8') as file:
+    with open(args.object_box_save_path, 'w', encoding='utf-8') as file:
         json.dump(obj_result, file, ensure_ascii=False, indent=4)
