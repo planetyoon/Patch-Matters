@@ -15,8 +15,8 @@ pip install -r requirements.txt
 
 ### Checkpoints
 
-Following [Ovdet](https://github.com/wusize/ovdet) to download weights and files and place them in the following format.
 google drive에 올려놨습니다. 다운받으시고 아래 경로 확인 후에 경로대로 넣으시면 됩니다.
+
 `ovdet/checkpoints`
 - clip_vitb32.pth
 - res50_fpn_soco_star_400.pth
@@ -80,6 +80,10 @@ pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --i
 pip install mmcv==2.0.1 -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.13/index.html
 pip install mmdet==3.1.0
 pip install mmengine==0.10.1
+
+#설치 확인
+python -c "from mmdet.apis import DetInferencer; print('✅ DetInferencer import OK')"
+
 
 # 기타 필수 라이브러리
 pip install opencv-python-headless rich pillow tqdm
