@@ -152,6 +152,14 @@ python generate_four_box.py ^
   --object_box_save_path "C:/patchmatters-vessl/divide/data/object_box.json"
 ```
 
+```bash
+python ovdet/get_main_box.py ^
+  --image_folder "C:/patchmatters-vessl/coco_image/coco_sample_data_Image_Textualization" ^
+  --object_box_save_path "C:/patchmatters-vessl/divide/data/object_box.json" ^
+  --main_box_save_path "C:/patchmatters-vessl/divide/data/main_box.json"
+```
+
+
 ---
 
 ## ⚠️ 7. 주요 시행착오 정리
