@@ -245,7 +245,7 @@ cd Patch-Matters/divide
 ✅ 3⃣ llama3 repo 설치 (필수 아닌, 원저자 가이드 포함)
 
 
-##서버에 conda 설치
+## 서버에 conda 설치
 
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
