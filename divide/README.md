@@ -34,17 +34,6 @@ google drive에 올려놨습니다. 다운받으시고 아래 경로 확인 후�
 - instances_val2017_novel.json
 
 
-### Run
-
-```python
-python divide/generate_four_box.py --image_folder 'your image folder' --four_box_save_path 'four_box.json' --object_box_save_path 'object_box.json'
-
-python ovdet/get_main_box.py --image_folder 'your image folder' --object_box_save_path 'object_box.json' --main_box_save_path 'main_box.json'
-
-python ovdet/get_main_box.py --image_folder 'your image folder' --object_box_save_path 'object_box.json' --main_box_save_path 'main_box.json'
-```
-
-
 
 # Patch Matters Divide 환경 구축 및 generate\_four\_box 실행 가이드 (w/ 시행착오 정리)
 
@@ -52,12 +41,20 @@ python ovdet/get_main_box.py --image_folder 'your image folder' --object_box_sav
 
 ---
 
-## 📦 1. Conda 환경 구성
-
+## 📦 1. Conda 환경 구성 패키지 파일 설치까지 한번에 포함해둠.
+### 방법 1(빠른 방법)
 ```bash
 conda create -n patch_matters_divide python=3.8.19 -y
 conda activate patch_matters_divide
+pip install -r requirements_divide.txt
 ```
+### 방법 2(추천, 정확한 복원/env 최초 생성 시 및 서버에서 사용 권장)
+```bash
+conda env create -f patch_matters_divide_env.yaml
+conda activate patch_matters_divide
+```
+
+
 
 ---
 
