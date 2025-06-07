@@ -1,15 +1,6 @@
 # Patch Matters: Training-free Fine-grained Image Caption Enhancement via Local Perception
 
 
-## Installation
-
-```bash
-conda create -n patch_matters python==3.8.19
-
-pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
-
-pip install -r requirements.txt
-```
 
 ## Usage
 
@@ -48,7 +39,7 @@ conda create -n patch_matters_divide python=3.8.19 -y
 conda activate patch_matters_divide
 pip install -r requirements_divide.txt
 ```
-### 방법 2(추천, 정확한 복원/env 최초 생성 시 및 서버에서 사용 권장)
+### 방법 2(추천, 정확한 복원/env 최초 생성 시 및 서버에서 사용 권장) -> 윈도우 기반으로 되어 있어 리눅스 기반으로 변경중 
 ```bash
 conda env create -f patch_matters_divide_env.yaml
 conda activate patch_matters_divide
