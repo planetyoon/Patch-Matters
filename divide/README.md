@@ -231,17 +231,7 @@ ssh [서버 아이디]@[서버 주소]
 ## ✅ 2⃣ 필수 환경 준비
 
 
-
-### Git clone
-```bash
-git clone https://github.com/planetyoon/Patch-Matters.git
-cd Patch-Matters/divide
-```
-
-## ✅ 3⃣ llama3 repo 설치 (필수 아닌, 원저자 가이드 포함)
-
-
-## 서버에 conda 설치
+### 서버에 conda 설치 /home/opt 에 설치 권장(innode 제한 없음...)
 
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -253,8 +243,18 @@ conda update -n base -c defaults conda
 ```
 ### Conda 환경 생성
 ```bash
-conda env create -f patch_matters_divide_env.yaml
+
 conda activate patch_matters_divide
+conda env create -f patch_matters_divide_env.yaml
+#conda create -n patch_matters_divide python=3.8.19 -y
+pip install -r requirements_divide.txt 
+
+
+#별도 설치 필요
+pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1+cu116 -f https://download.pytorch.org/whl/torch_stable.html
+#설치 확인
+python -c "import torch; print(torch.__version__); print(torch.version.cuda)"
+
 ```
 
 
@@ -280,3 +280,14 @@ export PATH=/root/miniconda3/bin:$PATH
 conda --version
 ```
 → 이러면 아마 conda 23.x.x 이런 식으로 나오게 될 거예요.
+
+### Git clone
+```bash
+git clone https://github.com/planetyoon/Patch-Matters.git
+cd Patch-Matters/divide
+```
+
+
+
+## ✅ 3⃣ llama3 repo 설치 (필수 아닌, 원저자 가이드 포함)
+
