@@ -6,7 +6,7 @@
 
 ### Checkpoints
 
-google drive에 올려놨습니다. 다운받으시고 아래 경로 확인 후에 경로대로 넣으시면 됩니다.
+google drive에 올려놨습니다. 다운받으시고 아래 경로 확인 후에 경로대로 넣으시면 됩니다.  
 로컬에 다운받으시고 SSH 접속후 VSCODE 에서 Explorer 에서 Drag and Drop으로 넣는게 편함.
 
 `ovdet/checkpoints`
@@ -26,7 +26,7 @@ https://drive.google.com/drive/folders/1O6rt6WN2ePPg6j-wVgF89T7ql2HiuRIG 여기�
 - instances_val2017_base.json
 - instances_val2017_novel.json
 
-
+---
 
 # Patch Matters Divide 환경 구축 및 generate\_four\_box 실행 가이드 (w/ 시행착오 정리)
 
