@@ -145,12 +145,14 @@ inference = DetInferencer(model=args.model_config_file, weights=args.checkpoint_
 ## ▶️ 6. 실행 명령어 (로컬 or 서버)
 
 ```bash
-python generate_four_box.py ^
-  --model_config_file "C:/patchmatters-vessl/divide/configs/baron/ov_coco/baron_kd_faster_rcnn_r50_fpn_syncbn_90kx2.py" ^
-  --checkpoint_file "C:/patchmatters-vessl/divide/ovdet/checkpoints/iter_90000.pth" ^
-  --image_folder "C:/patchmatters-vessl/coco_image/coco_sample_data_Image_Textualization" ^
-  --four_box_save_path "C:/patchmatters-vessl/divide/data/four_box.json" ^
-  --object_box_save_path "C:/patchmatters-vessl/divide/data/object_box.json"
+# 수정됨
+python generate_four_box.py \
+  --model_config_file /root/Patch-Matters/divide/configs/baron/ov_coco/baron_kd_faster_rcnn_r50_fpn_syncbn_90kx2.py \
+  --checkpoint_file /root/Patch-Matters/divide/ovdet/checkpoints/iter_90000.pth \
+  --image_folder /root/Patch-Matters/coco_image/coco_sample_data_Image_Textualization \
+  --four_box_save_path /root/Patch-Matters/divide/data/four_box.json \
+  --object_box_save_path /root/Patch-Matters/divide/data/object_box.json
+
 ```
 
 ```bash
