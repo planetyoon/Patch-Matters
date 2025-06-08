@@ -293,5 +293,119 @@ cd Patch-Matters/divide
 
 
 
-## ✅ 3⃣ llama3 repo 설치 (필수 아닌, 원저자 가이드 포함)
+---
 
+# 🚀 get_main_box.py 실행 가이드 (최신/정리본)
+## 📂 1️⃣ 사전 준비
+### ✅ 먼저 generate_four_box.py 실행 완료 후 아래 두 파일이 반드시 존재해야 함:
+
+파일	경로 (예시)
+object_box.json	/root/Patch-Matters/divide/data/object_box.json
+이미지 폴더 (your image folder)	/root/Patch-Matters/coco_image/coco_sample_data_Image_Textualization
+
+→ 확인 방법:
+
+```bash
+ls -lh /root/Patch-Matters/divide/data/object_box.json
+ls -lh /root/Patch-Matters/coco_image/coco_sample_data_Image_Textualization
+```
+
+---
+
+## ✏️ 2️⃣ get_main_box.py 코드 수정 사항
+### ✅ 수정 1️⃣ argparse 수정
+기존:
+```bash
+arg.add_argument(...)
+```
+변경:
+```bash
+args = parser.parse_args()
+args.llm_path = ...
+```
+→ 즉, 모든 arg. → args. 로 변경 필요
+
+---
+
+### ✅ 수정 2️⃣ LLM path 수정
+```bash
+arg.add_argument('--llm_path', type=str, help='LLM model', default='meta-llama/Meta-Llama-3-8B-Instruct')
+```
+
+---
+
+
+### ⚠️ 3️⃣ 추가 패키지 설치 (가상환경 내 실행)
+```bash
+pip install --upgrade transformers
+pip install icecream
+pip install 'accelerate>=0.26.0'
+pip install --upgrade jinja2
+huggingface-cli login
+```
+##### huggingface-cli login 시 주의:
+
+로그인 시 토큰 입력 → 토큰 발급은 👉 HuggingFace Tokens 에서 "New token" 생성
+
+권한: 최소 read 권한 이상
+
+터미널에서 로그인 성공 여부 확인:
+
+```bash
+huggingface-cli whoami
+```
+
+---
+
+
+### ✅ 4️⃣ get_main_box.py 코드 추가 수정
+#### 수정 1️⃣ generate_description 함수 수정
+```bash
+def generate_description(image_path, model, processor):
+    from PIL import Image
+    import torch
+
+    image = Image.open(image_path).convert("RGB")
+    prompt = "Describe this image in one sentence."
+
+    inputs = processor(images=image, text=prompt, return_tensors="pt").to(model.device, dtype=torch.float16)
+    generated_ids = model.generate(**inputs, max_new_tokens=30)
+    generated_text = processor.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
+    return generated_text
+```
+#### 수정 2️⃣ re_match 함수 수정
+```bash
+def re_match(common_objects):
+    import re
+    pattern = r"\[(.*?)\]"
+    matched_content = re.findall(pattern, str(common_objects))
+    if not matched_content:
+        return []
+    cleaned_items = matched_content[0].replace("'", "").strip()
+    return [item.strip() for item in cleaned_items.split(",") if item.strip()]
+```
+
+---
+
+### ▶️ 5️⃣ 실행 명령어
+```bash
+python /root/Patch-Matters/divide/get_main_box.py \
+  --image_folder /root/Patch-Matters/coco_image/coco_sample_data_Image_Textualization \
+  --object_box_save_path /root/Patch-Matters/divide/data/object_box.json \
+  --main_box_save_path /root/Patch-Matters/divide/data/main_box.json
+```
+#### 📌 결과 확인
+실행 후:
+```bash
+ls -lh /root/Patch-Matters/divide/data/main_box.json
+```
+→ main_box.json 생성 확인
+
+→ 이후 단계에서 description_generate/run.sh 에서 main_box.json 사용 예정
+
+### 🚩 최종 주의사항
+✅ generate_four_box.py → 반드시 먼저 실행 완료 후 진행
+✅ get_main_box.py 는 수정사항 반영 후 실행 (안 그러면 오류 발생)
+✅ main_box.json 은 data 폴더 아래 정상 생성됨 확인
+
+---
