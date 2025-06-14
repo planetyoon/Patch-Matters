@@ -312,3 +312,12 @@ ls -lh /root/Patch-Matters/divide/data/main_box.json
 ✅ main_box.json 은 data 폴더 아래 정상 생성됨 확인
 
 ---
+
+---
+
+
+### conda: command not found 오류 발생시 조치 사항
+```bash
+/root/miniconda3/bin/conda init
+source ~/.bashrc
+```
