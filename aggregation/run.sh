@@ -1,8 +1,12 @@
-set -ex 
+export HF_HOME=$HOME/.cache
+export TRANSFORMERS_CACHE=$HOME/.cache
+export XDG_CACHE_HOME=$HOME/.cache
+
+set -ex
 
 # export CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7
 node_index=0
-node_num=1 # Use 1 for single node, or set to the number of nodes if running on multiple nodes
+node_num=1 
 chunk_num=8
 
 

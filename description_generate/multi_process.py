@@ -84,6 +84,13 @@ def process_images(args):
         temp['image'] = img_src
         temp['size'] = [height, width]
         temp['local'] = box_description
+
+        if 'main_box' in key:
+            temp['main_box'] = key['main_box']
+        if 'four_box' in key:
+            temp['four_box'] = key['four_box']
+
+            
         result.append(temp)
 
     # Save the results to a JSON file

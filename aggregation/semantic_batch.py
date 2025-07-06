@@ -8,6 +8,8 @@ from lavis.models import load_model_and_preprocess
 import os
 import io
 import re
+import math
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from tqdm import tqdm
@@ -1508,6 +1510,9 @@ class fusion:
                     
                     score,error = self.blip_model.rank_captions(img, modified_text)
                     # print(modified_text,':',score)
+                    if score is None or (isinstance(score, float) and (math.isnan(score) or math.isinf(score))):
+                        print(f"[BLIP SCORE None] image: {merge} | text: {modified_text} | error: {error}")
+                        # 필요하면 similarity_list.append(0) 등으로 처리
 
                     similarity_list.append(score)
                 
@@ -1561,18 +1566,31 @@ class fusion:
             supplement_unique=[]
             supplement_same=categories['For Triples Describing the Same Thing'] 
             supplement_all=categories['For Triples Describing the Same Thing'] 
-            for i,contra in enumerate(similarity_contra_list):
-                # contra_list=[]
-                # for sim in contra:
-                #     contra_list.append(contra[sim])
-                max_contra=max(contra)
-                if (max_contra>0.3):
-                    list_label=contra.index(max_contra)
-                    supplement_contra.append(categories['For Contradictory Triples'][i][list_label])
-                    supplement_all.append(re.sub(r'\s*\(Description \d+\)', '', categories['For Contradictory Triples'][i][list_label]))
-
+            for i, contra in enumerate(similarity_contra_list):
+                 # contra가 리스트인지, 비어있지 않은지 체크
+                if not contra or not isinstance(contra, (list, tuple)):
+                    continue
+                # None이나 숫자 아닌 것 제거
+                valid_contra = [v for v in contra if v is not None and isinstance(v, (float, int))]
+                if not valid_contra:
+                    continue  # 비어있으면 넘어감
+                max_contra = max(valid_contra)
+                if max_contra is None or max_contra <= 0.3:
+                    continue
+                try:
+                    list_label = contra.index(max_contra)
+                except ValueError:
+                    list_label = None
+                if (
+                    list_label is not None and
+                    i < len(categories['For Contradictory Triples']) and
+                    list_label < len(categories['For Contradictory Triples'][i])
+                ):
+                    entry = categories['For Contradictory Triples'][i][list_label]
+                    supplement_contra.append(entry)
+                    supplement_all.append(re.sub(r'\s*\(Description \d+\)', '', entry))
             for i,sim in enumerate(similarity_unique):
-                if sim>0.3:
+                if sim is not None and sim>0.3:
                     supplement_unique.append(categories['For Unique Triples'][i])
                     supplement_all.append(re.sub(r'\s*\(Description \d+\)', '', categories['For Unique Triples'][i]))
             batch_supple.append(supplement_all)
@@ -1619,6 +1637,11 @@ class fusion:
         # 初始化一个空列表来存储重叠面积和对应的区域对
         # 初始化一个空列表来存储每对区域的IoU
         iou_values = []
+        main_box_coords = image_idx.get('main_box')
+        if main_box_coords is not None:
+            rectangles.append(box(*main_box_coords))
+        else:
+            print('main_box_coords is None')
         # print(region_locations)
         # print(rectangles)
         # 分别计算左上和右上、左下和右下的区域与相邻区域的IoU
@@ -2005,17 +2028,52 @@ class fusion:
             batch_group_two=[]
             batch_mergeiou=[]
             for number_iou in range(len(label_iou)):
-                if label_iou[number_iou]==1:
-                    batch_group_two.append([real_region_des[region_dict[str(number_iou)][0]],real_region_des[region_dict[str(number_iou)][1]]])
+                if label_iou[number_iou] == 1:
+                    idx0 = region_dict[str(number_iou)][0]
+                    idx1 = region_dict[str(number_iou)][1]
+                    print(f"[DEBUG] number_iou={number_iou}, idx0={idx0}, idx1={idx1}, len(real_region_des)={len(real_region_des)}")
+                    # 인덱스 유효성 검사
+                    if (
+                        isinstance(real_region_des, list)
+                        and idx0 < len(real_region_des)
+                        and idx1 < len(real_region_des)
+                    ):
+                        batch_group_two.append([real_region_des[idx0], real_region_des[idx1]])
+                    else:
+                        print(f"[WARNING] real_region_des index out of range: {idx0}, {idx1} (len={len(real_region_des)})")
+                        continue
+
+            batch_group = self.batch_group_two_sentence(batch_group_two)
+            id_group_two = 0
+            #수정
+            if not batch_group:
+                print(f"[ERROR] batch_group이 비어 있음! batch_group_two: {batch_group_two}")
+                return None
+
+            if id_group_two >= len(batch_group):
+                print(f"[ERROR] id_group_two({id_group_two}) >= batch_group 길이({len(batch_group)})! batch_group: {batch_group}")
+                return None
+
+            if id_group_two >= len(batch_group):
+                print(f"[ERROR] id_group_two({id_group_two}) exceeded batch_group length ({len(batch_group)})")
                 
-            batch_group=self.batch_group_two_sentence(batch_group_two)
-            id_group_two=0
+
+            temp_group = batch_group[id_group_two].outputs[0].text
+            
         
             for number_iou in range(len(label_iou)):
                 
                 if label_iou[number_iou]==1:
                     index_iou.append(number_iou)
                     temp_group=batch_group[id_group_two].outputs[0].text
+                    #수정
+                    print(f"[DEBUG] id_group_two: {id_group_two}, len(batch_group): {len(batch_group)}")
+                    if id_group_two >= len(batch_group):
+                        print(f"[ERROR] id_group_two={id_group_two} 가 batch_group 범위를 초과했습니다.")
+                        continue  # 또는 return None, raise 에러 등
+                    if not batch_group[id_group_two].outputs:
+                        print(f"[ERROR] batch_group[{id_group_two}].outputs 비어있음")
+                        continue
                     id_group_two+=1
                     region_dict_temp={'1': region_dict[str(number_iou)][0],'2': region_dict[str(number_iou)][1]}
                     categories = {
