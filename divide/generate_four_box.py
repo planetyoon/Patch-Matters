@@ -35,8 +35,8 @@ if __name__ == '__main__':
     arg.add_argument('--object_box_save_path', type=str, help='object detect save path')
     args = arg.parse_args()
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-    inference = DetInferencer(model=args.model_config_file, weights=args.checkpoint_file, device='cpu')
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    inference = DetInferencer(model=args.model_config_file, weights=args.checkpoint_file, device='cuda')
 
 
     image_files = [os.path.join(args.image_folder, f) for f in os.listdir(args.image_folder) if f.lower().endswith(('.png', '.jpg'))]

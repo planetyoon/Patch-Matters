@@ -137,3 +137,29 @@ checkpoints/
 
 #Ignore large dataset files
 divide/ovdet/data/coco/wusize/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Experiment & result outputs
+description_generate/description_output.json
+description_generate/orginal_description_chunk_*.json
+description_generate/description/
+description_generate/temp_image/
+aggregation/new_global/
+aggregation/pm_environment.yaml
+data/
+ovdet/main_box_progress.json
+ovdet/data/
+
+# Environment & install scripts
+Miniconda3-latest-Linux-x86_64.sh*
+patch_matters_divide_env_clean.yaml
+
+# 기타 중간 파일, 로그 등
+*.log
+*.db
+*.sqlite
+*.csv
+*.tmp

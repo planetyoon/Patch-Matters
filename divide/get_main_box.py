@@ -234,7 +234,7 @@ if __name__ == '__main__':
     save_path = args.main_box_save_path
 
 
-    progress_path = f'ovdet/main_box_progress.json'
+    progress_path = f'divide/main_box_progress.json'
 
     with open(object_detection_path, 'r', encoding='utf-8') as file:
         object_detection = json.load(file)
