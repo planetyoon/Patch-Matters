@@ -353,37 +353,20 @@ mkdir -p /opt/hf_cache/hub
 Windows에서 PowerShell 창을 엽니다.
 
 3. 모델 캐시 경로 환경 변수 지정
-powershell
-복사
-편집
+powershell 접속
 $env:HF_HOME = "D:\hf_cache"
-모델 다운로드 및 캐싱 경로를 지정합니다.
+모델 다운로드 및 캐싱 경로를 지정합니다.->원하는 디렉토리로 설정하시면 됩니다.
 
 4. HuggingFace 모델 다운로드
 powershell
-복사
-편집
 huggingface-cli download meta-llama/Llama-3.1-8B-Instruct
 다운로드가 완료되면 모델 파일이
 **D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct**에 저장됩니다.
 
 5. 모델 파일 원격 서버로 복사
 powershell
-복사
-편집
 scp -P 30432 -vr "D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct" root@165.132.46.89:/opt/hf_cache/hub/
 옵션	설명
 -P 30432	SSH 접속 포트(예시)
 -v	자세한 출력(진행상황, 옵션)
 -r	하위 디렉토리 포함 복사
-
-⚠️ 참고:
-대용량 복사 도중 끊어지면,
-rsync 사용을 추천합니다.
-
-예시:
-
-powershell
-복사
-편집
-rsync -avzP -e 'ssh -p 30432' "D:/hf_cache/hub/models--meta-llama--Llama-3.1-8B-
