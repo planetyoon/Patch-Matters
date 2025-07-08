@@ -321,3 +321,69 @@ ls -lh /root/Patch-Matters/divide/data/main_box.json
 /root/miniconda3/bin/conda init
 source ~/.bashrc
 ```
+
+
+# 🚀 Meta-Llama-3.1-8B-Instruct 모델 서버 업로드 가이드
+
+Windows 환경에서 HuggingFace 모델을 다운로드하고,  
+원격 서버에 안전하게 복사하는 전체 절차입니다.
+
+---
+
+## 📝 전체 절차 요약
+
+| 단계 | 작업 내용                    | 명령어/설명                                                                                             |
+|:---:|:-----------------------------|:--------------------------------------------------------------------------------------------------------|
+| 1   | **원격 서버에 디렉토리 생성** | `mkdir -p /opt/hf_cache/hub`                                                                            |
+| 2   | **로컬 PowerShell 실행**      | PowerShell 창을 실행 (Windows)                                                                          |
+| 3   | **환경 변수 설정**            | `$env:HF_HOME = "D:\hf_cache"`                                                                          |
+| 4   | **모델 다운로드**              | `huggingface-cli download meta-llama/Llama-3.1-8B-Instruct`                                             |
+| 5   | **서버로 파일 전송**           | `scp -P 30432 -vr "D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct" root@165.132.46.89:/opt/hf_cache/hub/` |
+
+---
+
+## 📂 상세 단계별 설명
+
+### 1. 원격 서버에 디렉토리 생성
+
+```bash
+mkdir -p /opt/hf_cache/hub
+
+2. 로컬 컴퓨터에서 PowerShell 실행
+Windows에서 PowerShell 창을 엽니다.
+
+3. 모델 캐시 경로 환경 변수 지정
+powershell
+복사
+편집
+$env:HF_HOME = "D:\hf_cache"
+모델 다운로드 및 캐싱 경로를 지정합니다.
+
+4. HuggingFace 모델 다운로드
+powershell
+복사
+편집
+huggingface-cli download meta-llama/Llama-3.1-8B-Instruct
+다운로드가 완료되면 모델 파일이
+**D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct**에 저장됩니다.
+
+5. 모델 파일 원격 서버로 복사
+powershell
+복사
+편집
+scp -P 30432 -vr "D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct" root@165.132.46.89:/opt/hf_cache/hub/
+옵션	설명
+-P 30432	SSH 접속 포트(예시)
+-v	자세한 출력(진행상황, 옵션)
+-r	하위 디렉토리 포함 복사
+
+⚠️ 참고:
+대용량 복사 도중 끊어지면,
+rsync 사용을 추천합니다.
+
+예시:
+
+powershell
+복사
+편집
+rsync -avzP -e 'ssh -p 30432' "D:/hf_cache/hub/models--meta-llama--Llama-3.1-8B-
