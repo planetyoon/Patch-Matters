@@ -150,8 +150,8 @@ python generate_four_box.py \
   --model_config_file /root/Patch-Matters/divide/configs/baron/ov_coco/baron_kd_faster_rcnn_r50_fpn_syncbn_90kx2.py \
   --checkpoint_file /root/Patch-Matters/divide/ovdet/checkpoints/iter_90000.pth \
   --image_folder /root/Patch-Matters/coco_image/coco_sample_data_Image_Textualization \
-  --four_box_save_path /root/Patch-Matters/divide/data/four_box.json \
-  --object_box_save_path /root/Patch-Matters/divide/data/object_box.json
+  --four_box_save_path /root/Patch-Matters/divide/result/four_box.json \
+  --object_box_save_path /root/Patch-Matters/divide/result/object_box.json
 
 ```
 
@@ -370,3 +370,4 @@ scp -P 30432 -vr "D:\hf_cache\hub\models--meta-llama--Llama-3.1-8B-Instruct" roo
 -P 30432	SSH 접속 포트(예시)
 -v	자세한 출력(진행상황, 옵션)
 -r	하위 디렉토리 포함 복사
+
